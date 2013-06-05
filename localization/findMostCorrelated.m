@@ -38,5 +38,14 @@ else
     res=l;
 end
 
+% [n,m]=size(res);
+% 
+% % subtract the mean
+% 
+% m=mean(res);
+% for i=1:n
+%     res(i,:)=res(i,:)-m;
+% end
+
 end
 
