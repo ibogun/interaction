@@ -9,7 +9,7 @@ function [ first, last ] = localizeInteraction( d,dt,toPlot,distSigma,...
 %
 %   Input:
 %
-%       d               -       object of the class 'dataEntry'
+%       d               -       struct with all the data from the video
 %       dt              -       threshold which defines 'how close the
 %           trajectories should be'
 %       toPlot          -       1 if the plot is necessary, 0 otherwise
@@ -24,12 +24,13 @@ function [ first, last ] = localizeInteraction( d,dt,toPlot,distSigma,...
 %       last            -       frame where the interaction ended
 %
 %   author: Ivan Bogun
+%   date  : June 6, 2013
 
 
 if nargin<4
     %  default parameters
-    distSigma=20;
-    nCellsSigma=20;
+    distSigma=19;
+    nCellsSigma=19;
     
     if nargin<3
         toPlot=0;
@@ -39,12 +40,15 @@ if nargin<4
 end
 
 
+l=d.trajectoryLeftHand;
+r=d.trajectoryRightHand;
+% get the object
+o=d.trajectoryObject;
 
 % get the right hand
-hand=findMostCorrelated(d);
+hand=findMostCorrelated(l,r,o);
 
-% get the object
-o=d.trajectoryObject.singlePointArray;
+
 
 x=hand(:,1);
 y=hand(:,2);
@@ -118,7 +122,7 @@ if (toPlot==1)
 end
 
 
-n=length(o_dx);
+n=length(o_x);
 handObjectDistances=zeros(n,1);
 hand_d=[x,y];
 o_d=[o_x,o_y];
@@ -138,6 +142,7 @@ if nargin<2
     % empirical estimation of the threshold
     dt=sqrt(var(handObjectDistancesVelocity));
 end
+
 % the following will find the largest subsequence satisfying
 % handObjectDistancesVelocity<dt
 
@@ -168,9 +173,10 @@ last=res(bestIndex,2);
 nShiftVelocities=floor(distSigma/2);
 
 first=first-nShiftVelocities;
-last=last-nShiftVelocities;
-if (last==-nShiftVelocities)
-    last=length(handObjectDistancesVelocity)+nShiftVelocities;
+last=last-2*nShiftVelocities;
+if (last==-2*nShiftVelocities)
+    last=length(handObjectDistancesVelocity)+2*nShiftVelocities;
 end
+
 end
 

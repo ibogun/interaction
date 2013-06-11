@@ -1,6 +1,8 @@
 function [  ] = visualizeConfusionMatrix( mat )
-%VIUALIZECONFUSIONMATRIX Summary of this function goes here
-%   Detailed explanation goes here
+%VIUALIZECONFUSIONMATRIX Plot confusion matrix
+%   
+%   Author:         I.Bogun (ibogun2010@my.fit.edu)
+%   Date  :         03/07/2013
 
 imagesc(mat);            %# Create a colored plot of the matrix values
 colormap(flipud(gray));  %# Change the colormap to gray (so higher values are
